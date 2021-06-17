@@ -1,13 +1,32 @@
-\documentclass[11pt, reqno]{amsart}
+%%%%%%%%%%%%%%%%%%%%%%% file template.tex %%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% This is a general template file for the LaTeX package SVJour3
+% for Springer journals.          Springer Heidelberg 2010/09/16
+%
+% Copy it to a new file with a new name and use it as the basis
+% for your article. Delete % signs as needed.
+%
+% This template includes a few options for different layouts and
+% content for various journals. Please consult a previous issue of
+% your journal as needed.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% First comes an example EPS file -- just ignore it and
+% proceed on the \documentclass line
+% your LaTeX will extract the file if required
+
+\RequirePackage{fix-cm}
+\documentclass[smallextended,natbib]{svjour3}       % onecolumn (second format)
+\smartqed  % flush right qed marks, e.g. at end of proof
+\usepackage{graphicx}
+\usepackage{mathptmx}      % use Times fonts if available on your TeX system
+%
+% insert here the call for the packages your document requires
+%\usepackage{latexsym}
+% etc.
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
-%\usepackage{textcomp}
-
-\title[Learning biological dynamics]{Learning biological dynamics from spatio-temporal data by Gaussian processes}
-\author{Lifeng Han}
-\date{June 2021}
-
-\usepackage{natbib}
 \usepackage{graphicx}
 \usepackage{multirow}
 \usepackage{booktabs,tabularx}
@@ -15,20 +34,58 @@
 \usepackage{hyperref}
 \usepackage{epstopdf}
 \usepackage{lineno}
+\usepackage{amsmath}
 \linenumbers
 \DeclareUnicodeCharacter{0301}{\'{e}}
+%
+% please place your own definitions here and don't use \def but
+% \newcommand{}{}
+%
+% Insert the name of "your journal" with
+\journalname{myjournal}
+%
 \begin{document}
 
+\title{Learning biological dynamics from spatio-temporal data by Gaussian processes%\thanks{Grants or other notes
+%about the article that should go on the front page should be
+%placed here. General acknowledgments should be placed at the end of the article.}
+}
+%\subtitle{Do you have a subtitle?\\ If so, write it here}
 
-\onehalfspacing
+\titlerunning{Learning biological dynamics from spatio-temporal data by GP}        % if too long for running head
 
-\begin{abstract}
-We propose a method of learning biological dynamics from spatio-temporal data by Gaussian processes (GP). This approach is essentially ``equation free'' and hence avoids model derivation, which is often difficult due to high complexity of biological processes. By exploiting the local nature of biological processes, dynamics can be learned in a data efficient manner. With a carefully chosen covariance function, learning reveals key insights of the underlying process and enables propagation uncertainty in multi-step forecasting. The methodology shows promising results when tested on synthetic data. We also demonstrate a case study on real image data of real E. coli colony.          
-\end{abstract}
+\author{Lifeng Han         \and
+        Second Author %etc.
+}
+
+%\authorrunning{Short form of author list} % if too long for running head
+
+\institute{F. Author \at
+              first address \\
+              Tel.: +123-45-678910\\
+              Fax: +123-45-678910\\
+              \email{fauthor@example.com}           %  \\
+%             \emph{Present address:} of F. Author  %  if needed
+           \and
+           S. Author \at
+              second address
+}
+
+\date{Received: date / Accepted: date}
+% The correct dates will be entered by the editor
+
 
 \maketitle
 
+\begin{abstract}
+We propose a method of learning biological dynamics from spatio-temporal data by Gaussian processes (GP). This approach is essentially ``equation free'' and hence avoids model derivation, which is often difficult due to high complexity of biological processes. By exploiting the local nature of biological processes, dynamics can be learned in a data efficient manner. With a carefully chosen covariance function, learning reveals key insights of the underlying process and enables propagation uncertainty in multi-step forecasting. The methodology shows promising results when tested on synthetic data. We also demonstrate a case study on real image data of real E. coli colony.  
+\keywords{First keyword \and Second keyword \and More}
+% \PACS{PACS code1 \and PACS code2 \and more}
+% \subclass{MSC code1 \and MSC code2 \and more}
+\end{abstract}
+
 \section{Introduction}
+\label{intro}
 Mathematical models have been used to study biological processes. High complexity of biological systems makes derivation of models from first principle difficult. Oftentimes many assumptions have to be made in the process of model formulation.  It is hard to validate these assumptions. Spatial-temporal biological processes pose a problem of higher dimensionality making resolving the aforementioned issues more challenging. For example, in predicting brain tumor growth, models as simple as one partial differential equation (PDE) \citep{Jackson2015a} and as complicated as a system of PDEs coupled with ordinary differential equations \citep{Eikenberry2009} were used. The mechanism of migration of tumor cells can be modeled as simple as linear diffusion  or as complicated as cell adhesion and repulsion from a mechanic perspective \citep{khain2012migration,aubert2008model}. In clinical settings, an available data set usually consists of a few brain images, which is the only observational data that many models rely on \citep{lipkova2019personalized,Kostelich2011a,Jackson2015a}. Parameter identifiability is of concern as well as the possibility of under or over fitting. In this paper, we propose a purely data-driven approach to forecast biological spatio-temporal processes, which circumvents the aforementioned issues.              
 
 Data-driven model discovery has emerged as a vibrant field that focuses on letting data dictate model formulation instead of basing on superfluous or subjective assumptions \citep{Brunton2019}. There are two popular approaches of data-driven model discovery. One utilizes machine learning techniques or descriptive statistical models which oftentimes offer a black-box solution. This approach does not reveal an explicit model, and hence lacks interpretability or mechanism. The other is based on sparse regression to select terms from an extensive library of model terms. Recent developments on denoising has made it popular in handling noisy biological data \citep{Nardini2020,Lagergren2020a}.
@@ -168,7 +225,7 @@ In Figure \ref{fig:u subplot 2d}, the prediction over time and its uncertainty i
 \caption[Forecasting to Time $t=2,8,14$ and $20$ with GP Trained with 2-D Synthetic Data]{\label{fig:u subplot 2d} Forecasting to time $t=2,8,14$ and $20$ with GP trained with 2-D synthetic data corrupted with noise $\sigma_{\epsilon}=0.001$. The colormap indicates the uncertainty (two standard deviation) of the prediction.}
 \end{figure}
 
-\subsection{Case Study: Predict Growth of E. coli Colony} .\\
+\subsection{Case Study: Predict Growth of E. coli Colony} 
 Modeling of growth of bacterial colony has attracted substantial interests \citep{mimura2000reaction,kawasaki1997modeling,leyva2013effects}. A recent study \citep{he2020predictive} proposed a model of a reaction-diffusion equation with density-dependent diffusion and growth to predict E coli. In that study, greyscale microscopy images were processed and then used for data fitting. Greyscale images are readily suitable for use in the local GP method with minimum processing. So we demonstrate a case study on forecasting growth of E. coli colony.
 
 Data used here consist of microscopy images of an E. coli colony expanding on semi-hard agar medium taken at 2-hour intervals. The images are in greyscale with a numeric value at each pixel indicating its darkness. The images taken at $t=24$ and 26 hours after inoculation are used as training data. The raw images are cropped  according to the one taken at $t=24$ in order to focus on the bacterial colony while allowing enough margin to observe growth. After the images are scaled to a size of 100 by 100 pixels, the interaction neighborhood is reasonably assumed to consist of only immediate neighbors. No further processing of the images are necessary although the raw images themselves are obviously noisy. However, it is one of the purposes of this case study to examine whether the local GP method is able to differentiate real mechanisms from random noise.
@@ -178,7 +235,7 @@ The forecasting results in comparison to the real data are shown in Figure \ref{
 
 \begin{figure}[h]
 \centerline{\includegraphics[width=\textwidth]{chapterGP/figures/ecoli100by100}}
-\caption[]{\label{fig:ecoli} Forecasting (bottom) of and real data (top) of E. coli colony evolution. The model was trained on the image data obtained at time $t=22$ and 24 hours after inoculation}
+\caption[]{\label{fig:ecoli} Forecasts (bottom pane) and real data (top pane) of E. coli colony evolution. The model was trained on the image data obtained at time $t=22$ and 24 hours after inoculation. The forecasts capture two patterns: the expansion of the colony and darkening of the center. But they also amply the artifacts: brightening of the colony edge at the top right and darkening of a shadow at the center bottom}
 \end{figure}
 
 
@@ -191,25 +248,45 @@ First, it replies on minimal assumptions on model building. Instead of formulati
 
 Second, it excels in small-data scenario. By exploiting the local nature of biological spatio-temporal processes, it achieves improved data efficiency so that very sparse time-series data is enough to make predictions. In other words, a local mapping with an input of a few dimensions is learned from the data instead of a global mapping on high dimensional spaces. This improvement of data efficiency has the advantage in applications to predict brain tumor growth for which there are oftentimes only a few brain images of each patient. Data efficiency can be further improved if we order the neighborhood properly with reasonable assumptions. However, this often comes at a price of generality, e.g., ignoring possibility of anisotropic diffusion or advection.   
 
-Third, it has built-in quantification of uncertainty and easy to implement. The advantage of using GP is that posterior variance is readily available for forecasting so that uncertainty in its prediction is naturally quantified. The ease of propagating uncertainty is due to our choice of the squared exponential covariance function for which integration can be done analytically (see Appendix). Hence the propagation of uncertainty is simply done by repeatedly applying the formula \ref{eq:E(u)} and (\ref{eq:cov(u)}), in contrast to ensemble methods and Bayesian methods, which reply on computer simulations [].   
+Third, it has built-in quantification of uncertainty and easy to implement. The advantage of using GP is that posterior variance is readily available for forecasting so that uncertainty in its prediction is naturally quantified. The ease of propagating uncertainty is due to our choice of the squared exponential covariance function for which integration can be done analytically (see Appendix). Hence the propagation of uncertainty is simply done by repeatedly applying the formula \ref{eq:E(u)} and (\ref{eq:cov(u)}), in contrast to ensemble methods and Bayesian methods, which reply on computer simulations \citep{lipkova2019personalized,Kostelich2011a}.   
 
-Fourth, it reveals a key insight of biological spatio-temporal processes.  This choice of covariance function also makes variable selection easy due to automatic relevance determination. From the selected variables, we can determine the neighborhood size. In the tested cases, our method correctly indicated the relevant variables. Being able to identifying the neighborhood size has biological significance since it tells the scales of spatial interaction in a time step. In the tested cases, the selected neighborhood is symmetric about its center due to the specific choice of the data-generating model. However, it should be noted that this is not necessary the case in practice. A asymmetric shape of a selected neighborhood can be an indicator of anisotropic diffusion or advection of the underlying process. In this sense, our method offers biological interpretation and is different from other black-box machine learning approaches.        
+Last but not least, it reveals a key insight of biological spatio-temporal processes.  This choice of covariance function also makes variable selection easy due to automatic relevance determination. From the selected variables, we can determine the neighborhood size. In the tested cases, our method correctly indicated the relevant variables. Being able to identifying the neighborhood size has biological significance since it tells the scales of spatial interaction in a time step. In the tested cases, the selected neighborhood is symmetric about its center due to the specific choice of the data-generating model. However, it should be noted that this is not necessary the case in practice. A asymmetric shape of a selected neighborhood can be an indicator of anisotropic diffusion or advection of the underlying process. In this sense, our method offers biological interpretation and is different from other black-box machine learning approaches. 
+
+The local GP method in its current form also has limitations. We give a brief discussion below and point out future directions.         
 
 Even though automatic relevance determination correctly identified relevant variables in the case of synthetic data. But it only gives a relative importance between variables. It is foreseeable that in the case of real-world data, the cut-off of relevance will not be so clear. Ideally, we need a more informed variable selection criterion with a built-in cut-off. This will be one of the directions of future studies. 
 
-We left out the observation model and tested our method on synthetic data in this paper. An observation model is needed to solve more realistic problems because exact observation is rarely available in practice. It is important to extend the local GP method to put it in the state space modeling framework. As noted in our testing results, the prediction deteriorates over time and thus there is need to incorporate new data to correct predictions as they become available. In other words, we need a filtering algorithm which can assimilate data in an iterative fashion similar to Kalman filters or particle filters. This shall be the focus of future study. It should be noted that state space modeling is challenging for nonparametric methods because of loss of Markov property in (\ref{eq:un=00003Df(un-1)}) (note that $f(\cdot)$ itself depends on all historical $\mathbf{u}$.) There are some attempts aimed at resolving this issue \citep{frigola2013bayesian,Ghosh2014} but it is not immediately clear how these can be extended to a high-dimensional spatio-temperoal process. 
+We left out the observation model in this paper. An observation model is needed to solve more realistic problems because exact observation is rarely available in practice. It is important to extend the local GP method to put it in the state space modeling framework. As noted in our testing results, the prediction deteriorates over time and thus there is need to incorporate new data to correct predictions as they become available. In other words, we need a filtering algorithm which can assimilate data in an iterative fashion similar to Kalman filters or particle filters. This shall be the focus of future study. It should be noted that state space modeling is challenging for nonparametric methods because of loss of Markov property in (\ref{eq:un=00003Df(un-1)}) (note that $f(\cdot)$ itself depends on all historical $\mathbf{u}$.) There are some attempts aimed at resolving this issue \citep{frigola2013bayesian,Ghosh2014} but it is not immediately clear how these can be extended to a high-dimensional spatio-temperoal process. 
 
-We approximated the state variables for all subsequent forecasting with normal distributions. This approximation leads to computationally efficiency as the work required to propagate  uncertainty is done via complicated but doable matrix algebra and computation (See Appendix \ref{app:prop-uncertainty}). The error introduced and whether there are computational alternatives are also left for future investigation.
+We approximated the state variables for all subsequent forecasting with normal distributions. This approximation leads to computationally efficiency as the work required to propagate uncertainty is done via a reasonable amount of matrix algebra and computation (See Appendix). The error introduced and whether there are computational alternatives are also left for future investigation.
 
-Another approximation we used to achieve the sparsity of the covariance matrix can also introduce error. The approximation is justified if the the covariance between remote sites decay rapidly. Since spatial independent noise is added in each time step, the assumption is expected to be met at least in the long term. A rigorous error analysis await for future studies. It should be pointed out that similar practice and rationale have been adopted in local Kalman filters and local particle filters. The localization of a Kalman filter makes parallelization of computation possible \citep{ott2004local,Hunt2007,szunyogh2008local}. Moreover, it is believed that local analysis avoids spurious correlation that would otherwise allow obervation at one location to influence the analysis of a  location an arbitrarily large distance away \citep{Hunt2007}. It should be noted that in our case the correlation between remote sites are not necessarily spurious because of the nonparametric nature of the method. \cite{Rebeschini2015} gave a rigorous proof to justify a simple locality implementation called block particle filters. Since then, the local particle filter has been implemented by \cite{morzfeld2018variational,farchi2018comparison} and refined by  \cite{Quinn2019}. These ideas lead to some clues to further develop the local GP method.     
+Another approximation we used to achieve the sparsity of the covariance matrix can also introduce error. The approximation is justified if the the covariance between remote sites decay rapidly. Since spatial independent noise is added in each time step, the assumption is expected to be met at least in the long term. A rigorous error analysis await for future studies. It should be pointed out that similar practice and rationale have been adopted in local Kalman filters and local particle filters. The localization of a Kalman filter makes parallelization of computation possible \citep{ott2004local,Hunt2007,szunyogh2008local}. Moreover, it is believed that local analysis avoids spurious correlation that would otherwise allow obervation at one location to influence the analysis of a  location an arbitrarily large distance away \citep{Hunt2007}. It should be noted that in our case the correlation between remote sites are not necessarily spurious because of the nonparametric nature of the method. \cite{Rebeschini2015} gave a rigorous proof to justify a simple locality implementation called block particle filters. Since then, the local particle filter has been implemented by \cite{morzfeld2018variational,farchi2018comparison}. These ideas lead to some clues to further develop the local GP method.     
 
 
 \section{Conclusion}
-We proposed a method to learn biological dynamics from spatio-temporal data by Gaussian processes.  Instead of formulating a mathematical model for the process,  the transition function is learned from data by GP. By exploiting the local nature of the dynamics, we improved the data efficiency and solved the problem of sparsity of temporal data. By exploiting Gaussianity, prediction and uncertainty can be propagated in a computationally efficient way. As shown in the test cases, this method not only excels at forecasting with quantified uncertainty but also generates insights to the underlying process. Recognizing its potential and current limitation, we discussed directions of future studies. 
+We proposed a method to learn biological dynamics from spatio-temporal data by Gaussian processes.  Instead of formulating a mathematical model for the process,  the transition function is learned from data by GP. By exploiting the local nature of the dynamics, we improved the data efficiency and solved the problem of sparsity of temporal data. By exploiting Gaussianity, prediction and uncertainty can be propagated in a computationally efficient way. As shown in the test cases, this method not only excels at forecasting with quantified uncertainty but also generates insights to the underlying process. Recognizing its potential and current limitation, we pointed out directions of future studies. 
 
 
-\bibliographystyle{plain}
-\bibliography{ref2}
+%\begin{acknowledgements}
+%If you'd like to thank anyone, place your comments here
+%and remove the percent signs.
+%\end{acknowledgements}
+
+
+% Authors must disclose all relationships or interests that 
+% could have direct or potential influence or impart bias on 
+% the work: 
+%
+% \section*{Conflict of interest}
+%
+% The authors declare that they have no conflict of interest.
+
+
+% BibTeX users please use one of
+\bibliographystyle{spbasic}      % basic style, author-year citations
+%\bibliographystyle{spmpsci}      % mathematics and physical sciences
+%\bibliographystyle{spphys}       % APS-like style for physics
+\bibliography{ref2}   % name your BibTeX data base
 
 \newpage
 \section*{Appendix: Derivation of Prediction and Uncertainty Propagation} \label{app:prop-uncertainty}
@@ -301,6 +378,6 @@ cov(u_{i},u_{j}) & = & S_{ij}+E[u_{i}^{*}\mathbf{k}_{*j}^{T}\boldsymbol{\beta}]+
 &  & -(m_{i}\mathbf{l}_{j}^{T}+m_{j}\mathbf{l}_{i}^{T})\boldsymbol{\beta} \label{eq:cov(u)}
 \end{align}
 
-
-
 \end{document}
+% end of file template.tex
+
