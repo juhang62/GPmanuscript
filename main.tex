@@ -37,6 +37,7 @@
 \usepackage{amsmath}
 \usepackage{multirow}
 \usepackage[normalem]{ulem}
+\usepackage{float}
 \linenumbers
 \DeclareUnicodeCharacter{0301}{\'{e}}
 %
@@ -164,18 +165,28 @@ where $\epsilon_{j}^{n}\sim N(0,\sigma^{2})$ is independent in space and time. \
 
 We use the numerical solution at two consecutive time points as training data. The hyperparameters found by maximizing marginal likelihood are reported in Table \ref{tab:length scales}. It is obvious that only immediate neighbors are relevant and should be included in the neighborhood set. The neighbors that are two sites away have length scale several magnitude larger and hence does not contribute to prediction. It is as expected since the training data are generated from two consecutive time of (\ref{eq:synthetic data formula}).     
 
-Then we obtain our forecasting results and compare them with the observation (a realized sample path). Due to the small chosen $\sigma^2$ and the stability of the traveling wave profile, the observation is considered as the ground truth.  We pick two starting points for forecasting, namely fledged and burgeoning data(see Figures \ref{fig:u subplot ic1} and \ref{fig:u subplot ic2}). Our forecasting predictions captured the general trend of the true process and showed gradual deterioration of the prediction. The quality of the prediction depends on the starting point which controls what the training data is used. Obviously, we shall not expect the forecasting to work well on the region of unseen data. Even though the predicted mean is in disparity with the ground truth, the uncertainty bounds (two standard deviations) are large. This showcases the strength of the method in uncertainty quantification. 
+Then we obtain our forecasting results and compare them with the sample mean (average of 100 realized sample path). Due to the small chosen $\sigma^2$ and the stability of the traveling wave, the observation demonstrate a traveling wave profile.  We pick two starting points for forecasting, namely fledged and burgeoning data(see Figures \ref{fig:u subplot ic1} and \ref{fig:u subplot ic2}). Our forecasting predictions captured the general trend of the true process and showed gradual deterioration of the prediction. The quality of the prediction depends on the starting point which controls what the training data is used. Obviously, we shall not expect the forecasting to work well on the region of unseen data. Even though the predicted mean is in disparity with the ground truth, the uncertainty bounds (two standard deviations) are large. This showcases the strength of the method in uncertainty quantification. 
 
-\begin{figure}[ht]
-\centerline{\includegraphics[width=\textwidth]{chapterGP/figures/bistable}}
+\newpage
+\begin{figure}[H]
+\centerline{\includegraphics[width=\textwidth]{chapterGP/figures/bistable-noi}}
 \caption{\label{fig:u subplot ic1} Forecasting to time $t=2,8,14$ and $20$ with GP trained with fledged synthetic data corrupted with noise $\sigma=0.01$. The shaded bounds indicate the uncertainty (two standard deviation) of the prediction.} 
 \end{figure}
 
-\begin{figure}[h]
-\centerline{\includegraphics[width=\textwidth]{chapterGP/figures/bistable-short}}
-\caption[Forecasting to Time $t=2,8,14$ and $20$ with GP Trained with Unfledged Synthetic Data]{\label{fig:u subplot ic2} Forecasting to time $t=2,8,14$ and $20$ with GP trained with unfledged synthetic data corrupted with noise $\sigma_{\epsilon}=0.01$. The shaded bounds indicate the uncertainty (two standard deviation) of the prediction.}
+\begin{figure}[H]
+\centerline{\includegraphics[width=\textwidth]{chapterGP/figures/bistable-noi2}}
+\caption{\label{fig:u subplot ic1 v2} (Version of of Figure \ref{fig:u subplot ic1}) Forecasting to time $t=2,8,14$ and $20$ with GP trained with fledged synthetic data corrupted with noise $\sigma=0.01$. The shaded bounds indicate the uncertainty (two standard deviation) of the prediction.} 
 \end{figure}
 
+\begin{figure}[H]
+\centerline{\includegraphics[width=\textwidth]{chapterGP/figures/bistable-noi-short}}
+\caption{\label{fig:u subplot ic2} Forecasting to time $t=2,8,14$ and $20$ with GP trained with unfledged synthetic data corrupted with noise $\sigma_{\epsilon}=0.01$. The shaded bounds indicate the uncertainty (two standard deviation) of the prediction.}
+\end{figure}
+
+\begin{figure}[H]
+\centerline{\includegraphics[width=\textwidth]{chapterGP/figures/bistable-noi-short2}}
+\caption{\label{fig:u subplot ic2 v2} (Version of of Figure \ref{fig:u subplot ic2}) Forecasting to time $t=2,8,14$ and $20$ with GP trained with unfledged synthetic data corrupted with noise $\sigma_{\epsilon}=0.01$. The shaded bounds indicate the uncertainty (two standard deviation) of the prediction.}
+\end{figure}
 
 The mean squared error (MSE) of the predictive mean and the negative log likelihood (NLL) are summarized in Table \ref{tab:MSE-and-NLL}. Loosely speaking, MSE indicates how good the predictive mean as a point estimate of the ground truth while NLL additionally takes into account the error bound that penalizes being too confident on an inaccurate point estimate or too conservative on an accurate point estimate. \emph{JF: I'm not sure I understand the previous sentence.  Do you have a reference for these statements?? LH: it's my bad wording... } We see that biologically meaningful ordering result in smaller MSE and NLL than those obtained by naive ordering (Table \ref{tab:MSE-and-NLL}), meaning that it is a better choice. We also notice that sparse approximation of covariance is prone to be over-confident about the point prediction but overall we are satisfied by its performance. 
 
